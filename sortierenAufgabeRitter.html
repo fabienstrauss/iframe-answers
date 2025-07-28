@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <title>Sortieraufgabe</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            padding: 20px;
+            background: transparent;
+        }
+        .sortable-list {
+            list-style: none;
+            padding: 0;
+            max-width: 400px;
+            margin-left: 0;
+            margin-right: auto;
+        }
+        .item {
+            background: transparent;
+            border: 1px solid #000;
+            margin: 10px 0;
+            padding: 10px;
+            cursor: move;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .details {
+            display: flex;
+            align-items: center;
+        }
+        .details img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+        #checkBtn {
+            background: transparent;
+            border: solid 1px #000;
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 16px;
+        }
+        #checkBtn:hover {
+            background: #000;
+            color: #fff;
+        }
+        #result {
+            margin-top: 20px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+<ul class="sortable-list" id="sortableList">
+    <li class="item" draggable="true" data-name="234">
+        <div class="details">
+            <span>A: 234</span>
+        </div>
+        <div class="drag-indicator">≡</div>
+    </li>
+    <li class="item" draggable="true" data-name="356">
+        <div class="details">
+            <span>B: 356</span>
+        </div>
+        <div class="drag-indicator">≡</div>
+    </li>
+    <li class="item" draggable="true" data-name="567">
+        <div class="details">
+            <span>C: 567</span>
+        </div>
+        <div class="drag-indicator">≡</div>
+    </li>
+    <li class="item" draggable="true" data-name="258">
+        <div class="details">
+            <span>D: 258</span>
+        </div>
+        <div class="drag-indicator">≡</div>
+    </li>
+    <li class="item" draggable="true" data-name="599">
+        <div class="details">
+            <span>E: 599</span>
+        </div>
+        <div class="drag-indicator">≡</div>
+    </li>
+    <li class="item" draggable="true" data-name="438">
+        <div class="details">
+            <span>F: 438</span>
+        </div>
+        <div class="drag-indicator">≡</div>
+    </li>
+</ul>
+
+<button id="checkBtn">Prüfen</button>
+<div id="result"></div>
+
+<script>
+    // Drag-and-Drop Logik
+    const list = document.getElementById("sortableList");
+    let draggedItem = null;
+
+    list.addEventListener("dragstart", (e) => {
+        draggedItem = e.target;
+    });
+
+    list.addEventListener("dragover", (e) => {
+        e.preventDefault();
+        const target = e.target.closest(".item");
+        if (target && target !== draggedItem) {
+            const rect = target.getBoundingClientRect();
+            const next = (e.clientY - rect.top) > (rect.height / 2);
+            list.insertBefore(draggedItem, next ? target.nextSibling : target);
+        }
+    });
+
+    // Richtige Reihenfolge definieren
+    const correctOrder = [
+        "234",
+        "258",
+        "356",
+        "438",
+        "567",
+        "599"
+    ];
+
+    // Prüfung beim Klick
+    document.getElementById("checkBtn").addEventListener("click", () => {
+        const items = [...document.querySelectorAll(".sortable-list .item")];
+        const currentOrder = items.map(item => item.dataset.name);
+
+        const isCorrect = JSON.stringify(currentOrder) === JSON.stringify(correctOrder);
+        const resultDiv = document.getElementById("result");
+
+        if (isCorrect) {
+            resultDiv.textContent = "Super, alles richtig! Deine erste Zahl für den Code lautet: 5.";
+            resultDiv.style.color = "green";
+        } else {
+            resultDiv.textContent = "Leider ist noch nicht alles richtig, schaue dir die Zahlen nochmal genau an!";
+            resultDiv.style.color = "red";
+        }
+    });
+</script>
+</body>
+</html>
