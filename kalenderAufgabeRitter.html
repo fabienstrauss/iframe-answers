@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <title>Kalender-Aufgabe</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            padding: 20px;
+            background: transparent;
+        }
+        .container {
+            max-width: 400px;
+            margin-left: 0;
+            margin-right: auto;
+        }
+        input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            box-sizing: border-box;
+            background: transparent;
+        }
+        #checkBtn {
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 16px;
+        }
+        #result {
+            margin-top: 20px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <input type="text" id="codeInput" maxlength="3" placeholder="z. B. 123">
+    <button id="checkBtn">Prüfen</button>
+    <div id="result"></div>
+</div>
+
+<script>
+    const correctCode = "342";
+
+    document.getElementById("checkBtn").addEventListener("click", () => {
+        const input = document.getElementById("codeInput").value.trim();
+        const resultDiv = document.getElementById("result");
+
+        if (input === correctCode) {
+            resultDiv.textContent = "Super! Du geschickt erkannt, dass hier die Zahl 342 dargestellt wird. Deine dritte und letzte Zahl für den Code lautet: 9.";
+            resultDiv.style.color = "green";
+        } else {
+            resultDiv.textContent = "Noch nicht ganz richtig! 🔎 Tipp: Schaue genau, wie viele Hunderter, Zehner und Einer kannst du entdecken?";
+            resultDiv.style.color = "red";
+        }
+    });
+</script>
+</body>
+</html>
