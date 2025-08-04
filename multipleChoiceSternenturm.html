@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <title>Multiple-Choice-Aufgabe</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            padding: 20px;
+            background: transparent;
+        }
+        .container {
+            max-width: 400px;
+            margin-left: 0;
+            margin-right: auto;
+        }
+        .question {
+            margin-bottom: 15px;
+        }
+        .option {
+            margin-bottom: 10px;
+        }
+        #checkBtn {
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 16px;
+        }
+        #result {
+            margin-top: 20px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <form id="quizForm">
+        <div class="option">
+            <label><input type="checkbox" name="answer" value="a"> 201 + 395 </label>
+        </div>
+        <div class="option">
+            <label><input type="checkbox" name="answer" value="b"> 250 + 349 </label>
+        </div>
+        <div class="option">
+            <label><input type="checkbox" name="answer" value="c"> 199 + 401 </label>
+        </div>
+        <div class="option">
+            <label><input type="checkbox" name="answer" value="d"> 150 + 425 </label>
+        </div>
+    </form>
+
+    <button id="checkBtn">Prüfen</button>
+    <div id="result"></div>
+</div>
+
+<script>
+    const correctAnswers = ["a", "c"];
+
+    document.getElementById("checkBtn").addEventListener("click", () => {
+        const selected = [...document.querySelectorAll('input[name="answer"]:checked')]
+            .map(el => el.value)
+            .sort();
+
+        const resultDiv = document.getElementById("result");
+
+        const isCorrect = JSON.stringify(selected) === JSON.stringify(correctAnswers.sort());
+
+        if (isCorrect) {
+            resultDiv.textContent = "Richtig! Du hast die passenden Aufgaben gefunden und gut abgeschätzt! Das zeigt, dass du Zahlen im Kopf vergleichen kannst. Die ersten Buchstaben deines Lösungsworts lauten: ZA.";
+            resultDiv.style.color = "green";
+        } else {
+            resultDiv.textContent = "Leider war deine Auswahl nicht ganz richtig. 🔎 Tipp: Runde die Zahlen auf volle Hunderter oder glatte Zehner.";
+            resultDiv.style.color = "red";
+        }
+    });
+</script>
+</body>
+</html>
