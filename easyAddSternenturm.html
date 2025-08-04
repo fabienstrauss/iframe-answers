@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <title>Easy-Add-Aufgabe</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            padding: 20px;
+            background: transparent;
+        }
+        .container {
+            max-width: 400px;
+            margin-left: 0;
+            margin-right: auto;
+        }
+        .numbers {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .number, .plus {
+            padding: 10px 16px;
+            background: #f0f0f0;
+            border: 1px solid #ccc;
+            user-select: none;
+            font-size: 16px;
+        }
+        .number {
+            cursor: pointer;
+        }
+        .selected {
+            background-color: #d0eaff;
+            border-color: #007acc;
+        }
+        .plus {
+            background: transparent;
+            border: none;
+            font-weight: bold;
+            font-size: 18px;
+        }
+        #combineBtn {
+            padding: 10px 20px;
+            font-size: 16px;
+        }
+        #result {
+            margin-top: 20px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h2>Kombiniere die Zahlen sinnvoll!</h2>
+    <div class="numbers" id="numbersContainer"></div>
+    <button id="combineBtn">Kombinieren</button>
+    <div id="result"></div>
+</div>
+
+<script>
+    const initialValues = [150, 275, 25, 350];
+    const allowedCombinations = [
+        [150, 350],
+        [275, 25],
+        [500, 300]
+    ];
+
+    const container = document.getElementById("numbersContainer");
+    const resultDiv = document.getElementById("result");
+    let selected = [];
+
+    function renderNumbers(values) {
+        container.innerHTML = "";
+        values.forEach((val, index) => {
+            const numEl = document.createElement("div");
+            numEl.classList.add("number");
+            numEl.textContent = val;
+            numEl.dataset.value = val;
+            numEl.dataset.index = index;
+            container.appendChild(numEl);
+
+            if (index < values.length - 1) {
+                const plusEl = document.createElement("div");
+                plusEl.classList.add("plus");
+                plusEl.textContent = "+";
+                container.appendChild(plusEl);
+            }
+        });
+    }
+
+    function getCurrentNumbers() {
+        return [...container.querySelectorAll(".number")].map(el => parseInt(el.dataset.value));
+    }
+
+    function getNumberElements() {
+        return [...container.querySelectorAll(".number")];
+    }
+
+    // Initial render
+    renderNumbers(initialValues);
+
+    // Selection logic
+    container.addEventListener("click", (e) => {
+        if (!e.target.classList.contains("number")) return;
+        const el = e.target;
+
+        if (selected.includes(el)) {
+            el.classList.remove("selected");
+            selected = selected.filter(item => item !== el);
+        } else if (selected.length < 2) {
+            el.classList.add("selected");
+            selected.push(el);
+        }
+    });
+
+    document.getElementById("combineBtn").addEventListener("click", () => {
+        if (selected.length !== 2) {
+            resultDiv.textContent = "Bitte wähle genau zwei Zahlen aus.";
+            resultDiv.style.color = "red";
+            return;
+        }
+
+        const val1 = parseInt(selected[0].dataset.value);
+        const val2 = parseInt(selected[1].dataset.value);
+        const sum = val1 + val2;
+
+        const combinationValid = allowedCombinations.some(pair =>
+            (pair.includes(val1) && pair.includes(val2) && pair.reduce((a,b)=>a+b) === sum)
+        );
+
+        if (!combinationValid) {
+            resultDiv.textContent = "Leider noch nicht ganz richtig, versuche es nochmal. 🔎 Tipp: Kannst du zwei Zahlen finden, die zusammen eine glatte Zahl ergeben?";
+            resultDiv.style.color = "red";
+            selected.forEach(el => el.classList.remove("selected"));
+            selected = [];
+            return;
+        }
+
+        // Position für neues Element bestimmen
+        const allNumbers = getNumberElements();
+        const index1 = allNumbers.indexOf(selected[0]);
+        const index2 = allNumbers.indexOf(selected[1]);
+        const minIndex = Math.min(index1, index2);
+
+        // Alte Elemente und Pluszeichen entfernen
+        const allChildren = [...container.children];
+        const toRemove = [];
+
+        allChildren.forEach((child, i) => {
+            if (child === selected[0] || child === selected[1]) {
+                toRemove.push(child);
+                // auch das nachfolgende "+" falls es da ist
+                if (allChildren[i + 1] && allChildren[i + 1].classList.contains("plus")) {
+                    toRemove.push(allChildren[i + 1]);
+                }
+                // oder das vorherige "+"
+                if (allChildren[i - 1] && allChildren[i - 1].classList.contains("plus")) {
+                    toRemove.push(allChildren[i - 1]);
+                }
+            }
+        });
+
+        toRemove.forEach(el => el.remove());
+
+        // Neue Liste rendern basierend auf aktueller Reihenfolge
+        const remaining = getCurrentNumbers();
+        remaining.splice(minIndex, 0, sum);
+        renderNumbers(remaining);
+
+        // Reset Auswahl
+        selected = [];
+        resultDiv.textContent = "Sehr gut!";
+        resultDiv.style.color = "green";
+
+        // Check ob finale Lösung erreicht
+        if (remaining.length === 1 && remaining[0] === 800) {
+            resultDiv.textContent = "Super, alles richtig! Du hast die Zahlen klever verbunden, um glatte Summen zu bilden. Der zweite Teil deines Lösungsworts lautet: UB.";
+        }
+    });
+</script>
+</body>
+</html>
