@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <style>
+        body {
+            font-family: sans-serif;
+            padding: 20px;
+            background: transparent;
+        }
+        .container {
+            max-width: 1000px;
+            margin-left: 0;
+            margin-right: auto;
+        }
+        .textblock {
+            font-size: 18px;
+            line-height: 1.8;
+        }
+        .textblock p {
+            margin-bottom: 16px;
+        }
+        select {
+            font-size: 16px;
+            padding: 2px 6px;
+            margin: 0 4px;
+            display: inline-block;
+            vertical-align: middle;
+            height: auto;
+        }
+        #checkBtn {
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 16px;
+        }
+        #result {
+            margin-top: 20px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="textblock">
+        <p>
+            Um die Aufgabe 124 + 368 halbschriftlich zu lösen, rechne ich zuerst die
+            <select id="luecke1">
+                <option value="">-- wählen --</option>
+                <option value="Hunderter">Hunderter</option>
+                <option value="Zehner">Zehner</option>
+                <option value="Einer">Einer</option>
+                <option value="Ergebnisse">Ergebnisse</option>
+                <option value="Teilergebnisse">Teilergebnisse</option>
+            </select>
+            zusammen:
+        </p>
+        <p>100 + 300 =
+            <select id="luecke2">
+                <option value="">-- wählen --</option>
+                <option value="200">200</option>
+                <option value="400">400</option>
+                <option value="500">500</option>
+            </select>.
+        </p>
+
+        <p>
+            Dann rechne ich die
+            <select id="luecke3">
+                <option value="">-- wählen --</option>
+                <option value="Hunderter">Hunderter</option>
+                <option value="Zehner">Zehner</option>
+                <option value="Einer">Einer</option>
+                <option value="Ergebnisse">Ergebnisse</option>
+                <option value="Teilergebnisse">Teilergebnisse</option>
+            </select>
+            zusammen:
+        </p>
+        <p>20 + 60 = 80.</p>
+
+        <p>
+            Zum Schluss rechne ich die
+            <select id="luecke4">
+                <option value="">-- wählen --</option>
+                <option value="Hunderter">Hunderter</option>
+                <option value="Zehner">Zehner</option>
+                <option value="Einer">Einer</option>
+                <option value="Ergebnisse">Ergebnisse</option>
+                <option value="Teilergebnisse">Teilergebnisse</option>
+            </select>
+            zusammen:
+        </p>
+        <p>4 + 8 = 12.</p>
+
+        <p>
+            Nun addiere ich alle
+            <select id="luecke5">
+                <option value="">-- wählen --</option>
+                <option value="Hunderter">Hunderter</option>
+                <option value="Zehner">Zehner</option>
+                <option value="Einer">Einer</option>
+                <option value="Ergebnisse">Ergebnisse</option>
+                <option value="Teilergebnisse">Teilergebnisse</option>
+            </select>:
+        </p>
+        <p>400 + 80 + 12 =
+            <select id="luecke6">
+                <option value="">-- wählen --</option>
+                <option value="492">492</option>
+                <option value="482">482</option>
+                <option value="500">500</option>
+            </select>.
+        </p>
+
+        <p>Das
+            <select id="luecke7">
+                <option value="">-- wählen --</option>
+                <option value="Endergebnis">Endergebnis</option>
+                <option value="Resultat">Resultat</option>
+                <option value="Zwischenergebnis">Zwischenergebnis</option>
+                <option value="Ziel">Ziel</option>
+            </select>
+            der Aufgabe lautet:
+            <select id="luecke8">
+                <option value="">-- wählen --</option>
+                <option value="492">492</option>
+                <option value="482">482</option>
+                <option value="500">500</option>
+            </select>.
+        </p>
+    </div>
+
+    <button id="checkBtn">Prüfen</button>
+    <div id="result"></div>
+</div>
+
+<script>
+    const correctAnswers = {
+        luecke1: "Hunderter",
+        luecke2: "400",
+        luecke3: "Zehner",
+        luecke4: "Einer",
+        luecke5: "Teilergebnisse",
+        luecke6: "492",
+        luecke7: "Endergebnis",
+        luecke8: "492"
+    };
+
+    document.getElementById("checkBtn").addEventListener("click", () => {
+        let allCorrect = true;
+
+        for (let key in correctAnswers) {
+            const select = document.getElementById(key);
+            if (select.value !== correctAnswers[key]) {
+                allCorrect = false;
+                break;
+            }
+        }
+
+        const resultDiv = document.getElementById("result");
+
+        if (allCorrect) {
+            resultDiv.textContent = "Super, du hast alle Lücken richtig ausgewählt! Die letzten Buchstaben deines Lösungsworts lauten: ER.";
+            resultDiv.style.color = "green";
+        } else {
+            resultDiv.textContent = "Leider war deine Auswahl noch nicht ganz richtig. Versuche es nochmal!";
+            resultDiv.style.color = "red";
+        }
+    });
+</script>
+</body>
+</html>
